@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>লগইন / রেজিস্ট্রেশন — MRZN Apps & Games</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="brand">
+      <span class="brand-mark">M</span>
+      <span class="brand-name">MRZN <span>Apps & Games</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">হোম</a></li>
+      <li><a href="index.html#apps">অ্যাপস</a></li>
+    </ul>
+    <div class="nav-user" id="nav-auth-slot"></div>
+  </div>
+</nav>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login">লগইন</button>
+      <button class="auth-tab" id="tab-register">রেজিস্টার</button>
+    </div>
+
+    <div class="auth-error" id="auth-error"></div>
+    <div class="auth-msg" id="auth-msg"></div>
+
+    <!-- LOGIN FORM -->
+    <form id="login-form">
+      <div class="field-group">
+        <label class="field-label">ইমেইল</label>
+        <input type="email" class="field" id="login-email" required placeholder="you@example.com">
+      </div>
+      <div class="field-group">
+        <label class="field-label">পাসওয়ার্ড</label>
+        <input type="password" class="field" id="login-password" required placeholder="••••••••">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" id="login-btn">লগইন করুন</button>
+    </form>
+
+    <!-- REGISTER FORM -->
+    <form id="register-form" style="display:none">
+      <div class="field-group">
+        <label class="field-label">ইউজারনেম</label>
+        <input type="text" class="field" id="reg-username" required placeholder="আপনার নাম">
+      </div>
+      <div class="field-group">
+        <label class="field-label">ইমেইল</label>
+        <input type="email" class="field" id="reg-email" required placeholder="you@example.com">
+      </div>
+      <div class="field-group">
+        <label class="field-label">পাসওয়ার্ড</label>
+        <input type="password" class="field" id="reg-password" required placeholder="কমপক্ষে ৬ ক্যারেক্টার" minlength="6">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" id="reg-btn">অ্যাকাউন্ট তৈরি করুন</button>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/auth.js"></script>
+</body>
+      </html>
+      
