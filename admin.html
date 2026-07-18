@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>অ্যাডমিন প্যানেল — MRZN Apps & Games</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="brand">
+      <span class="brand-mark">M</span>
+      <span class="brand-name">MRZN <span>Apps & Games</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">হোম</a></li>
+      <li><a href="index.html#apps">অ্যাপস</a></li>
+    </ul>
+    <div class="nav-user" id="nav-auth-slot"></div>
+  </div>
+</nav>
+
+<div class="container" style="padding-top:36px">
+  <div id="admin-guard">
+    <div class="loader"><div class="ring"></div></div>
+  </div>
+
+  <div id="admin-content" style="display:none">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">ADMIN PANEL</div>
+        <h2 class="section-title">অ্যাপ ম্যানেজমেন্ট</h2>
+      </div>
+      <button class="btn btn-primary" id="add-app-btn">+ নতুন অ্যাপ যোগ করুন</button>
+    </div>
+
+    <div class="panel" style="padding:0;overflow-x:auto">
+      <table class="admin-table">
+        <thead>
+          <tr><th>আইকন</th><th>নাম</th><th>ক্যাটাগরি</th><th>রেটিং</th><th>যোগ হয়েছে</th><th>একশন</th></tr>
+        </thead>
+        <tbody id="admin-table-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ADD/EDIT MODAL -->
+<div class="modal-overlay" id="app-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title" id="modal-title">নতুন অ্যাপ যোগ করুন</div>
+      <button class="close-x" id="close-modal">✕</button>
+    </div>
+    <form id="app-form">
+      <input type="hidden" id="app-id-field">
+      <div class="field-group">
+        <label class="field-label">অ্যাপের নাম *</label>
+        <input type="text" class="field" id="f-name" required>
+      </div>
+      <div class="field-group">
+        <label class="field-label">ক্যাটাগরি *</label>
+        <input type="text" class="field" id="f-category" required placeholder="Games, Tools, AI, Utility...">
+      </div>
+      <div class="field-group">
+        <label class="field-label">বিবরণ *</label>
+        <textarea class="field" id="f-description" required placeholder="অ্যাপটি সম্পর্কে সংক্ষেপে লিখুন"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">আইকন URL</label>
+        <input type="url" class="field" id="f-icon" placeholder="https://...">
+      </div>
+      <div class="field-group">
+        <label class="field-label">স্ক্রিনশট URL (কমা দিয়ে আলাদা করুন)</label>
+        <input type="text" class="field" id="f-screenshots" placeholder="https://img1.png, https://img2.png">
+      </div>
+      <div class="field-group">
+        <label class="field-label">ডাউনলোড লিংক</label>
+        <input type="url" class="field" id="f-download" placeholder="https://github.com/.../app.apk">
+      </div>
+      <div class="field-group">
+        <label class="field-label">ডেভেলপার নোট (ঐচ্ছিক)</label>
+        <textarea class="field" id="f-note" placeholder="বিশেষ কোনো নোট বা আপডেট তথ্য"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" id="save-app-btn">সেভ করুন</button>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MRZN Apps & Games — অফলাইন-ফার্স্ট অ্যাপ ও গেমের ঘাঁটি</title>
+<meta name="description" content="MRZN Apps & Games — Termux-এ তৈরি অ্যাপ, গেম আর AI টুলের শোকেস। দেখুন, রেটিং দিন, রিভিউ করুন।">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="brand">
+      <span class="brand-mark">M</span>
+      <span class="brand-name">MRZN <span>Apps & Games</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">হোম</a></li>
+      <li><a href="index.html#apps">অ্যাপস</a></li>
+      <li><a href="profile.html">প্রোফাইল</a></li>
+    </ul>
+    <div class="nav-user" id="nav-auth-slot">
+      <a href="login.html" class="btn btn-primary btn-sm">লগইন</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <div class="boot-log" id="boot-log"></div>
+    <h1 class="hero-headline">আপনার পরবর্তী প্রিয় অ্যাপ<br>এখানেই খুঁজে নিন।</h1>
+    <p class="hero-sub">Termux-এ হাতে বানানো অ্যাপ, গেম আর AI টুল — সরাসরি ডেভেলপারের কাছ থেকে, কমিউনিটির রিভিউ সহ।</p>
+    <div class="hero-cta">
+      <a href="#apps" class="btn btn-primary">অ্যাপ দেখুন</a>
+      <a href="login.html" class="btn btn-ghost">রিভিউ দিতে লগইন করুন</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-num" id="stat-apps">—</div><div class="stat-label">Apps Listed</div></div>
+      <div><div class="stat-num" id="stat-reviews">—</div><div class="stat-label">Reviews</div></div>
+      <div><div class="stat-num" id="stat-avg">—</div><div class="stat-label">Avg Rating</div></div>
+    </div>
+  </div>
+</header>
+
+<section class="section" id="apps">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">CATALOG</div>
+        <h2 class="section-title">সব অ্যাপ ও গেম</h2>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <div class="search-box">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="search-input" placeholder="অ্যাপ বা গেমের নাম খুঁজুন...">
+      </div>
+    </div>
+    <div class="toolbar" id="category-chips">
+      <button class="filter-chip active" data-cat="all">সব</button>
+    </div>
+
+    <div id="app-grid-wrap">
+      <div class="loader"><div class="ring"></div></div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-text">© 2026 MRZN Apps & Games — Built offline-first in Termux.</div>
+    <div class="footer-text">mrzn-web.app</div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
