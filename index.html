@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="google-site-verification" content="xd3xUi76yHEAt1A3mtAtUYGrB6gF8szCPTZ6ZoIgrf0" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MRZN Apps & Games — অফলাইন-ফার্স্ট অ্যাপ ও গেমের ঘাঁটি</title>
-<meta name="description" content="MRZN Apps & Games — Termux-এ তৈরি অ্যাপ, গেম আর AI টুলের শোকেস। দেখুন, রেটিং দিন, রিভিউ করুন।">
+<title>MRZN Apps & Games </title>
+<meta name="description" content="Apps & Games — A showcase of apps, games, and AI tools you've created. View, rate, and review.">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -17,12 +17,12 @@
       <span class="brand-name">MRZN <span>Apps & Games</span></span>
     </a>
     <ul class="nav-links">
-      <li><a href="index.html" class="active">হোম</a></li>
-      <li><a href="index.html#apps">অ্যাপস</a></li>
-      <li><a href="profile.html">প্রোফাইল</a></li>
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="index.html#apps">Apps</a></li>
+      <li><a href="profile.html">Profile</a></li>
     </ul>
     <div class="nav-user" id="nav-auth-slot">
-      <a href="login.html" class="btn btn-primary btn-sm">লগইন</a>
+      <a href="login.html" class="btn btn-primary btn-sm">Login</a>
     </div>
   </div>
 </nav>
@@ -30,11 +30,11 @@
 <header class="hero">
   <div class="container">
     <div class="boot-log" id="boot-log"></div>
-    <h1 class="hero-headline">আপনার পরবর্তী প্রিয় অ্যাপ<br>এখানেই খুঁজে নিন।</h1>
-    <p class="hero-sub">Termux-এ হাতে বানানো অ্যাপ, গেম আর AI টুল — সরাসরি ডেভেলপারের কাছ থেকে, কমিউনিটির রিভিউ সহ।</p>
+    <h1 class="hero-headline">Find information and <br>review the apps you love.</h1>
+    <p class="hero-sub">Share your own software information with MRZN. Always with the reliable, trusted MRZN team.</p>
     <div class="hero-cta">
-      <a href="#apps" class="btn btn-primary">অ্যাপ দেখুন</a>
-      <a href="login.html" class="btn btn-ghost">রিভিউ দিতে লগইন করুন</a>
+      <a href="#apps" class="btn btn-primary">App list</a>
+      <a href="login.html" class="btn btn-ghost">Login to leave a review</a>
     </div>
     <div class="hero-stats">
       <div><div class="stat-num" id="stat-apps">—</div><div class="stat-label">Apps Listed</div></div>
@@ -49,18 +49,18 @@
     <div class="section-head">
       <div>
         <div class="eyebrow">CATALOG</div>
-        <h2 class="section-title">সব অ্যাপ ও গেম</h2>
+        <h2 class="section-title">All apps & games</h2>
       </div>
     </div>
 
     <div class="toolbar">
       <div class="search-box">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="search-input" placeholder="অ্যাপ বা গেমের নাম খুঁজুন...">
+        <input type="text" id="search-input" placeholder="Find an app or game...">
       </div>
     </div>
     <div class="toolbar" id="category-chips">
-      <button class="filter-chip active" data-cat="all">সব</button>
+      <button class="filter-chip active" data-cat="all">All</button>
     </div>
 
     <div id="app-grid-wrap">
@@ -68,14 +68,21 @@
     </div>
   </div>
 </section>
-
+  
 <footer class="footer">
   <div class="container">
-    <div class="footer-text">© 2026 MRZN Apps & Games — Built offline-first in Termux.</div>
-    <div class="footer-text">mrzn-web.app</div>
+    <div class="footer-text">© 2026 MRZN Apps & Games — made by Rafiuzzaman.</div>
+    <div style="display:flex;gap:16px;align-items:center">
+      <a href="https://youtube.com/@mrznapps_games?si=fKnK3nBYOeyRThQA" target="_blank" rel="noopener" class="nav-icon-btn" title="YouTube" style="width:36px;height:36px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.4 3.5 12 3.5 12 3.5s-7.4 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c2 .6 9.4.6 9.4.6s7.4 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg>
+      </a>
+      <a href="https://vm.tiktok.com/ZS9r8bp4T8YjC-dFSSk/" target="_blank" rel="noopener" class="nav-icon-btn" title="TikTok" style="width:36px;height:36px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82s.51.5 0 0A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64 0 3.33 2.76 5.7 5.69 5.7 3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3s-1.88.09-3.24-1.48Z"/></svg>
+      </a>
+    </div>
   </div>
 </footer>
-
+  
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="js/supabase-client.js"></script>
 <script src="js/utils.js"></script>
