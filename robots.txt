@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /admin.html
+Allow: /
+
+Sitemap: https://mrzn99-lab.github.io/MRZN-apps-games/sitemap.xml
