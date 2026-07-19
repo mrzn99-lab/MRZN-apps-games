@@ -1,10 +1,18 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>login / Registration — MRZN Apps & Games</title>
+<title>Log In / Register — MRZN Apps & Games</title>
 <link rel="stylesheet" href="css/style.css">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PFK6JYF7Y1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-PFK6JYF7Y1");
+</script>
 </head>
 <body>
 
@@ -25,8 +33,8 @@
 <div class="auth-wrap">
   <div class="auth-card">
     <div class="auth-tabs">
-      <button class="auth-tab active" id="tab-login">login</button>
-      <button class="auth-tab" id="tab-register">Registration</button>
+      <button class="auth-tab active" id="tab-login">Log In</button>
+      <button class="auth-tab" id="tab-register">Register</button>
     </div>
 
     <div class="auth-error" id="auth-error"></div>
@@ -42,14 +50,14 @@
         <label class="field-label">Password</label>
         <input type="password" class="field" id="login-password" required placeholder="••••••••">
       </div>
-      <button type="submit" class="btn btn-primary btn-block" id="login-btn">Login</button>
+      <button type="submit" class="btn btn-primary btn-block" id="login-btn">Log In</button>
     </form>
 
     <!-- REGISTER FORM -->
     <form id="register-form" style="display:none">
       <div class="field-group">
         <label class="field-label">Username</label>
-        <input type="text" class="field" id="reg-username" required placeholder="your name">
+        <input type="text" class="field" id="reg-username" required placeholder="Your name">
       </div>
       <div class="field-group">
         <label class="field-label">Email</label>
@@ -57,9 +65,9 @@
       </div>
       <div class="field-group">
         <label class="field-label">Password</label>
-        <input type="password" class="field" id="reg-password" required placeholder="Minimum 6 character" minlength="6">
+        <input type="password" class="field" id="reg-password" required placeholder="At least 6 characters" minlength="6">
       </div>
-      <button type="submit" class="btn btn-primary btn-block" id="reg-btn">Create account</button>
+      <button type="submit" class="btn btn-primary btn-block" id="reg-btn">Create Account</button>
     </form>
   </div>
 </div>
@@ -69,5 +77,4 @@
 <script src="js/utils.js"></script>
 <script src="js/auth.js"></script>
 </body>
-      </html>
-      
+</html>
