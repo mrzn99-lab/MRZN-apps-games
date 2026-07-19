@@ -29,21 +29,21 @@ function renderProfile(session, profile, reviews) {
         <div style="color:var(--text-faint);font-size:13px;font-family:var(--f-mono)">${escapeHTML(session.user.email)}</div>
         ${profile?.is_admin ? '<span class="badge badge-admin" style="margin-top:8px;display:inline-block">ADMIN</span>' : ""}
       </div>
-      <button class="btn btn-ghost btn-sm" id="logout-btn">লগআউট</button>
+      <button class="btn btn-ghost btn-sm" id="logout-btn">logout</button>
     </div>
 
     <div class="panel" style="margin-top:20px">
-      <div class="field-label" style="font-size:12px;margin-bottom:14px">ইউজারনেম পরিবর্তন করুন</div>
+      <div class="field-label" style="font-size:12px;margin-bottom:14px">Change Username</div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
         <input type="text" class="field" id="username-input" value="${escapeHTML(name)}" style="max-width:280px">
-        <button class="btn btn-primary btn-sm" id="save-username-btn">সেভ করুন</button>
+        <button class="btn btn-primary btn-sm" id="save-username-btn">Save</button>
       </div>
     </div>
 
     <div class="panel" style="margin-top:20px">
-      <div class="field-label" style="font-size:12px;margin-bottom:14px">আপনার রিভিউসমূহ (${reviews.length})</div>
+      <div class="field-label" style="font-size:12px;margin-bottom:14px">Your Review (${reviews.length})</div>
       <div id="my-reviews">
-        ${reviews.length ? reviews.map(myReviewItemHTML).join("") : `<div style="color:var(--text-faint);font-size:13.5px">আপনি এখনো কোনো রিভিউ দেননি।</div>`}
+        ${reviews.length ? reviews.map(myReviewItemHTML).join("") : `<div style="color:var(--text-faint);font-size:13.5px">You have not left any reviews.</div>`}
       </div>
     </div>
   `;
@@ -55,13 +55,13 @@ function renderProfile(session, profile, reviews) {
 
   document.getElementById("save-username-btn").addEventListener("click", async () => {
     const newName = document.getElementById("username-input").value.trim();
-    if (!newName) return showToast("ইউজারনেম খালি রাখা যাবে না", "error");
+    if (!newName) return showToast("Username cannot be empty. ", "error");
 
     const { error } = await supabaseClient
       .from("profiles").update({ username: newName }).eq("id", session.user.id);
 
-    if (error) return showToast("আপডেট করা যায়নি।", "error");
-    showToast("ইউজারনেম আপডেট হয়েছে!", "success");
+    if (error) return showToast("Could not Update", "error");
+    showToast("Updated", "success");
     refreshNavAuth();
   });
 }
@@ -74,7 +74,7 @@ function myReviewItemHTML(r) {
       <div class="review-user">
         <img src="${escapeHTML(app.icon_url || 'assets/placeholder-icon.svg')}" style="width:34px;height:34px;border-radius:8px;background:var(--panel-2)" onerror="this.style.opacity=0">
         <div>
-          <a href="app.html?id=${r.app_id}" class="review-name" style="color:var(--cyan)">${escapeHTML(app.name || "অ্যাপ")}</a>
+          <a href="app.html?id=${r.app_id}" class="review-name" style="color:var(--cyan)">${escapeHTML(app.name || "App")}</a>
           <div class="review-date">${timeAgo(r.created_at)}</div>
         </div>
       </div>
