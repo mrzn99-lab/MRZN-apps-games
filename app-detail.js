@@ -32,6 +32,8 @@ async function loadAppDetail() {
   const { data: ratingRow } = await supabaseClient
     .from("app_ratings").select("*").eq("app_id", CURRENT_APP_ID).maybeSingle();
 
+  injectStructuredData(app, ratingRow);
+
   const { data: reviews } = await supabaseClient
     .from("reviews_with_user").select("*").eq("app_id", CURRENT_APP_ID);
 
@@ -98,6 +100,55 @@ function renderDetail(app, ratingRow, reviews) {
   `;
 
   renderReviewForm(myReview);
+}
+
+function injectStructuredData(app, ratingRow) {
+  // remove any previous structured data (in case of re-render)
+  document.getElementById("structured-data")?.remove();
+
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": app.name,
+    "description": app.description,
+    "applicationCategory": app.category,
+    "operatingSystem": "Android",
+  };
+
+  if (app.icon_url) data.image = app.icon_url;
+  if (app.download_url) data.url = app.download_url;
+
+  if (ratingRow && ratingRow.review_count > 0) {
+    data.aggregateRating = {
+      "@type": "AggregateRating",
+      "ratingValue": ratingRow.avg_rating,
+      "reviewCount": ratingRow.review_count,
+      "bestRating": "5",
+      "worstRating": "1",
+    };
+  }
+
+  const script = document.createElement("script");
+  script.id = "structured-data";
+  script.type = "application/ld+json";
+  script.textContent = JSON.stringify(data);
+  document.head.appendChild(script);
+
+  // Open Graph tags for rich social-media link previews
+  setMetaTag("og:title", app.name);
+  setMetaTag("og:description", app.description);
+  if (app.icon_url) setMetaTag("og:image", app.icon_url);
+  setMetaTag("og:type", "website");
+}
+
+function setMetaTag(property, content) {
+  let tag = document.querySelector(`meta[property="${property}"]`);
+  if (!tag) {
+    tag = document.createElement("meta");
+    tag.setAttribute("property", property);
+    document.head.appendChild(tag);
+  }
+  tag.setAttribute("content", content);
 }
 
 function reviewItemHTML(r) {
