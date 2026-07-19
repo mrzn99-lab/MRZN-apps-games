@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel — MRZN Apps & Games</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="brand">
+      <span class="brand-mark">M</span>
+      <span class="brand-name">MRZN <span>Apps & Games</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#apps">Apps</a></li>
+    </ul>
+    <div class="nav-user" id="nav-auth-slot"></div>
+  </div>
+</nav>
+
+<div class="container" style="padding-top:36px">
+  <div id="admin-guard">
+    <div class="loader"><div class="ring"></div></div>
+  </div>
+
+  <div id="admin-content" style="display:none">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">ADMIN PANEL</div>
+        <h2 class="section-title">App Management</h2>
+      </div>
+      <button class="btn btn-primary" id="add-app-btn">+ Add New App</button>
+    </div>
+
+    <div class="panel" style="padding:0;overflow-x:auto">
+      <table class="admin-table">
+        <thead>
+          <tr><th>Icon</th><th>Name</th><th>Category</th><th>Rating</th><th>Added</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="admin-table-body"></tbody>
+      </table>
+    </div>
+
+    <div class="section-head" style="margin-top:40px">
+      <div>
+        <div class="eyebrow">MODERATION</div>
+        <h2 class="section-title">Flagged Reviews</h2>
+      </div>
+    </div>
+    <div class="panel" id="flagged-reviews-wrap">
+      <div style="color:var(--text-faint);font-size:13.5px">Loading...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD/EDIT MODAL -->
+<div class="modal-overlay" id="app-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title" id="modal-title">Add New App</div>
+      <button class="close-x" id="close-modal">✕</button>
+    </div>
+    <form id="app-form">
+      <input type="hidden" id="app-id-field">
+      <div class="field-group">
+        <label class="field-label">App Name *</label>
+        <input type="text" class="field" id="f-name" required>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Category *</label>
+        <input type="text" class="field" id="f-category" required placeholder="Games, Tools, AI, Utility...">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Description *</label>
+        <textarea class="field" id="f-description" required placeholder="Briefly describe the app"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Icon URL</label>
+        <input type="url" class="field" id="f-icon" placeholder="https://...">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Screenshot URLs (comma-separated)</label>
+        <input type="text" class="field" id="f-screenshots" placeholder="https://img1.png, https://img2.png">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Download Link</label>
+        <input type="url" class="field" id="f-download" placeholder="https://github.com/.../app.apk">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Developer Note (optional)</label>
+        <textarea class="field" id="f-note" placeholder="Any special note or update info"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" id="save-app-btn">Save</button>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
