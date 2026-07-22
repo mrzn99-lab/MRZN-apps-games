@@ -19,26 +19,35 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 async function loadAppDetail() {
-  const { data: app, error } = await supabaseClient
-    .from("apps").select("*").eq("id", CURRENT_APP_ID).single();
+  try {
+    const { data: app, error } = await supabaseClient
+      .from("apps").select("*").eq("id", CURRENT_APP_ID).single();
 
-  if (error || !app) {
-    document.getElementById("detail-wrap").innerHTML = `<div class="empty-state">This app could not be found.</div>`;
-    return;
+    if (error || !app) {
+      document.getElementById("detail-wrap").innerHTML =
+        `<div class="empty-state">This app could not be found.${error ? `<br><span style="font-size:11px;opacity:0.6">${escapeHTML(error.message)}</span>` : ""}</div>`;
+      return;
+    }
+
+    document.getElementById("page-title").textContent = app.name + " — MRZN Apps & Games";
+
+    const { data: ratingRow, error: ratingErr } = await supabaseClient
+      .from("app_ratings").select("*").eq("app_id", CURRENT_APP_ID).maybeSingle();
+    if (ratingErr) console.error("rating error:", ratingErr);
+
+    injectStructuredData(app, ratingRow);
+
+    const { data: reviews, error: reviewsErr } = await supabaseClient
+      .from("reviews_with_user").select("*").eq("app_id", CURRENT_APP_ID);
+    if (reviewsErr) console.error("reviews error:", reviewsErr);
+
+    renderDetail(app, ratingRow, reviews || []);
+    bindReviewForm(app);
+  } catch (err) {
+    document.getElementById("detail-wrap").innerHTML =
+      `<div class="empty-state">Something went wrong: ${escapeHTML(err.message)}</div>`;
+    console.error(err);
   }
-
-  document.getElementById("page-title").textContent = app.name + " — MRZN Apps & Games";
-
-  const { data: ratingRow } = await supabaseClient
-    .from("app_ratings").select("*").eq("app_id", CURRENT_APP_ID).maybeSingle();
-
-  injectStructuredData(app, ratingRow);
-
-  const { data: reviews } = await supabaseClient
-    .from("reviews_with_user").select("*").eq("app_id", CURRENT_APP_ID);
-
-  renderDetail(app, ratingRow, reviews || []);
-  bindReviewForm(app);
 }
 
 function renderDetail(app, ratingRow, reviews) {
