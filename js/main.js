@@ -21,32 +21,39 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function loadApps() {
-  const { data: apps, error } = await supabaseClient
-    .from("apps")
-    .select("*")
-    .order("created_at", { ascending: false });
+  try {
+    const { data: apps, error } = await supabaseClient
+      .from("apps")
+      .select("*")
+      .order("created_at", { ascending: false });
 
-  if (error) {
+    if (error) {
+      document.getElementById("app-grid-wrap").innerHTML =
+        `<div class="empty-state">Couldn't load apps: ${escapeHTML(error.message)}</div>`;
+      console.error(error);
+      return;
+    }
+
+    const { data: ratings, error: ratingsError } = await supabaseClient.from("app_ratings").select("*");
+    if (ratingsError) console.error("ratings error:", ratingsError);
+    const ratingMap = {};
+    (ratings || []).forEach(r => ratingMap[r.app_id] = r);
+
+    ALL_APPS = (apps || []).map(a => ({
+      ...a,
+      avg_rating: ratingMap[a.id]?.avg_rating || 0,
+      review_count: ratingMap[a.id]?.review_count || 0
+    }));
+
+    window.ALL_APPS = ALL_APPS;
+    buildCategoryChips();
+    renderApps(ALL_APPS);
+    updateStats();
+  } catch (err) {
     document.getElementById("app-grid-wrap").innerHTML =
-      `<div class="empty-state">Couldn't load apps. Check your Supabase configuration.</div>`;
-    console.error(error);
-    return;
+      `<div class="empty-state">Something went wrong loading apps: ${escapeHTML(err.message)}</div>`;
+    console.error(err);
   }
-
-  const { data: ratings } = await supabaseClient.from("app_ratings").select("*");
-  const ratingMap = {};
-  (ratings || []).forEach(r => ratingMap[r.app_id] = r);
-
-  ALL_APPS = (apps || []).map(a => ({
-    ...a,
-    avg_rating: ratingMap[a.id]?.avg_rating || 0,
-    review_count: ratingMap[a.id]?.review_count || 0
-  }));
-
-  window.ALL_APPS = ALL_APPS;
-  buildCategoryChips();
-  renderApps(ALL_APPS);
-  updateStats();
 }
 
 function buildCategoryChips() {
