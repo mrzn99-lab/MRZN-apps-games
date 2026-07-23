@@ -1,7 +1,12 @@
-/* ===================== HOMEPAGE LOGIC ===================== */
+/* ===================== HOMEPAGE LOGIC (with pagination) ===================== */
 
-let ALL_APPS = [];
+const PAGE_SIZE = 99;
+
+let CURRENT_PAGE = 1;
+let TOTAL_COUNT = 0;
+let CURRENT_SEARCH = "";
 let ACTIVE_CATEGORY = "all";
+let ALL_CATEGORIES = [];
 
 document.addEventListener("DOMContentLoaded", () => {
   runBootLog("boot-log", [
@@ -13,54 +18,41 @@ document.addEventListener("DOMContentLoaded", () => {
   ]);
 
   refreshNavAuth();
-  loadApps();
+  loadStats();
+  loadCategories();
+  loadPage(1);
 
+  let searchTimer;
   document.getElementById("search-input").addEventListener("input", (e) => {
-    renderApps(filterApps(e.target.value));
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+      CURRENT_SEARCH = e.target.value.trim();
+      loadPage(1);
+    }, 350); // debounce so we don't query on every keystroke
   });
 });
 
-async function loadApps() {
-  try {
-    const { data: apps, error } = await supabaseClient
-      .from("apps")
-      .select("*")
-      .order("created_at", { ascending: false });
+async function loadStats() {
+  const { data, error } = await supabaseClient.from("site_stats").select("*").maybeSingle();
+  if (error || !data) return;
+  document.getElementById("stat-apps").textContent = data.total_apps ?? "—";
+  document.getElementById("stat-reviews").textContent = data.total_reviews ?? "—";
+  document.getElementById("stat-avg").textContent = data.avg_rating ?? "—";
+}
 
-    if (error) {
-      document.getElementById("app-grid-wrap").innerHTML =
-        `<div class="empty-state">Couldn't load apps: ${escapeHTML(error.message)}</div>`;
-      console.error(error);
-      return;
-    }
-
-    const { data: ratings, error: ratingsError } = await supabaseClient.from("app_ratings").select("*");
-    if (ratingsError) console.error("ratings error:", ratingsError);
-    const ratingMap = {};
-    (ratings || []).forEach(r => ratingMap[r.app_id] = r);
-
-    ALL_APPS = (apps || []).map(a => ({
-      ...a,
-      avg_rating: ratingMap[a.id]?.avg_rating || 0,
-      review_count: ratingMap[a.id]?.review_count || 0
-    }));
-
-    window.ALL_APPS = ALL_APPS;
-    buildCategoryChips();
-    renderApps(ALL_APPS);
-    updateStats();
-  } catch (err) {
-    document.getElementById("app-grid-wrap").innerHTML =
-      `<div class="empty-state">Something went wrong loading apps: ${escapeHTML(err.message)}</div>`;
-    console.error(err);
-  }
+async function loadCategories() {
+  // fetch just the category column once to build the filter chips
+  const { data, error } = await supabaseClient.from("apps").select("category");
+  if (error || !data) return;
+  ALL_CATEGORIES = [...new Set(data.map(a => a.category).filter(Boolean))].sort();
+  buildCategoryChips();
 }
 
 function buildCategoryChips() {
-  const cats = ["all", ...new Set(ALL_APPS.map(a => a.category))];
+  const cats = ["all", ...ALL_CATEGORIES];
   const wrap = document.getElementById("category-chips");
   wrap.innerHTML = cats.map(c =>
-    `<button class="filter-chip ${c === "all" ? "active" : ""}" data-cat="${escapeHTML(c)}">${c === "all" ? "All" : escapeHTML(c)}</button>`
+    `<button class="filter-chip ${c === ACTIVE_CATEGORY ? "active" : ""}" data-cat="${escapeHTML(c)}">${c === "all" ? "All" : escapeHTML(c)}</button>`
   ).join("");
 
   wrap.querySelectorAll(".filter-chip").forEach(btn => {
@@ -68,18 +60,61 @@ function buildCategoryChips() {
       wrap.querySelectorAll(".filter-chip").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
       ACTIVE_CATEGORY = btn.dataset.cat;
-      renderApps(filterApps(document.getElementById("search-input").value));
+      loadPage(1);
     });
   });
 }
 
-function filterApps(query) {
-  query = (query || "").toLowerCase().trim();
-  return ALL_APPS.filter(a => {
-    const matchCat = ACTIVE_CATEGORY === "all" || a.category === ACTIVE_CATEGORY;
-    const matchQuery = !query || a.name.toLowerCase().includes(query) || a.description.toLowerCase().includes(query);
-    return matchCat && matchQuery;
-  });
+async function loadPage(page) {
+  CURRENT_PAGE = page;
+  const wrap = document.getElementById("app-grid-wrap");
+  wrap.innerHTML = `<div class="loader"><div class="ring"></div></div>`;
+
+  try {
+    let query = supabaseClient.from("apps").select("*", { count: "exact" });
+
+    if (ACTIVE_CATEGORY !== "all") {
+      query = query.eq("category", ACTIVE_CATEGORY);
+    }
+    if (CURRENT_SEARCH) {
+      const q = CURRENT_SEARCH.replace(/[%_]/g, "");
+      query = query.or(`name.ilike.%${q}%,description.ilike.%${q}%`);
+    }
+
+    const from = (page - 1) * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+    query = query.order("created_at", { ascending: false }).range(from, to);
+
+    const { data: apps, count, error } = await query;
+
+    if (error) {
+      wrap.innerHTML = `<div class="empty-state">Couldn't load apps: ${escapeHTML(error.message)}</div>`;
+      return;
+    }
+
+    TOTAL_COUNT = count || 0;
+
+    // fetch ratings only for the apps actually shown on this page
+    const ids = (apps || []).map(a => a.id);
+    let ratingMap = {};
+    if (ids.length) {
+      const { data: ratings } = await supabaseClient.from("app_ratings").select("*").in("app_id", ids);
+      (ratings || []).forEach(r => ratingMap[r.app_id] = r);
+    }
+
+    const appsWithRatings = (apps || []).map(a => ({
+      ...a,
+      avg_rating: ratingMap[a.id]?.avg_rating || 0,
+      review_count: ratingMap[a.id]?.review_count || 0
+    }));
+
+    window.ALL_APPS = appsWithRatings; // used by the assistant/search helper too
+    renderApps(appsWithRatings);
+    renderPagination();
+  } catch (err) {
+    wrap.innerHTML = `<div class="empty-state">Something went wrong: ${escapeHTML(err.message)}</div>`;
+    console.error(err);
+  }
 }
 
 function renderApps(list) {
@@ -91,7 +126,6 @@ function renderApps(list) {
     </div>`;
     return;
   }
-
   wrap.innerHTML = `<div class="app-grid">${list.map(cardHTML).join("")}</div>`;
 }
 
@@ -112,15 +146,33 @@ function cardHTML(app) {
   </a>`;
 }
 
-function updateStats() {
-  const totalApps = ALL_APPS.length;
-  const totalReviews = ALL_APPS.reduce((s, a) => s + a.review_count, 0);
-  const ratedApps = ALL_APPS.filter(a => a.review_count > 0);
-  const avg = ratedApps.length
-    ? (ratedApps.reduce((s, a) => s + Number(a.avg_rating), 0) / ratedApps.length).toFixed(1)
-    : "—";
+function renderPagination() {
+  const totalPages = Math.max(1, Math.ceil(TOTAL_COUNT / PAGE_SIZE));
+  let holder = document.getElementById("pagination-wrap");
+  if (!holder) {
+    holder = document.createElement("div");
+    holder.id = "pagination-wrap";
+    holder.style.cssText = "display:flex;justify-content:center;align-items:center;gap:16px;margin-top:32px";
+    document.getElementById("app-grid-wrap").after(holder);
+  }
 
-  document.getElementById("stat-apps").textContent = totalApps;
-  document.getElementById("stat-reviews").textContent = totalReviews;
-  document.getElementById("stat-avg").textContent = avg;
+  holder.innerHTML = `
+    <button class="btn btn-ghost btn-sm" id="prev-page-btn" ${CURRENT_PAGE <= 1 ? "disabled" : ""}>← Previous</button>
+    <span style="font-family:var(--f-mono);font-size:13px;color:var(--text-dim)">Page ${CURRENT_PAGE} of ${totalPages}</span>
+    <button class="btn btn-ghost btn-sm" id="next-page-btn" ${CURRENT_PAGE >= totalPages ? "disabled" : ""}>Next →</button>
+  `;
+
+  document.getElementById("prev-page-btn").addEventListener("click", () => {
+    if (CURRENT_PAGE > 1) {
+      loadPage(CURRENT_PAGE - 1);
+      window.scrollTo({ top: document.getElementById("apps").offsetTop - 80, behavior: "smooth" });
+    }
+  });
+  document.getElementById("next-page-btn").addEventListener("click", () => {
+    const totalPages = Math.max(1, Math.ceil(TOTAL_COUNT / PAGE_SIZE));
+    if (CURRENT_PAGE < totalPages) {
+      loadPage(CURRENT_PAGE + 1);
+      window.scrollTo({ top: document.getElementById("apps").offsetTop - 80, behavior: "smooth" });
+    }
+  });
 }
