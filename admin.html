@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="icon" type="image/png" href="assets/logo.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Panel — MRZN Apps & Games</title>
 <link rel="stylesheet" href="css/style.css">
@@ -20,7 +20,7 @@
 <nav class="navbar">
   <div class="container">
     <a href="index.html" class="brand">
-      <span class="brand-mark">M</span>
+      <img src="assets/logo.png" class="brand-mark" style="object-fit:cover">
       <span class="brand-name">MRZN <span>Apps & Games</span></span>
     </a>
     <ul class="nav-links">
@@ -90,6 +90,16 @@
       <div class="field-group">
         <label class="field-label">Icon URL</label>
         <input type="url" class="field" id="f-icon" placeholder="https://...">
+      </div>
+      <div class="field-group" style="display:flex;gap:12px">
+        <div style="flex:1">
+          <label class="field-label">App Size</label>
+          <input type="text" class="field" id="f-size" placeholder="e.g. 45 MB">
+        </div>
+        <div style="flex:1">
+          <label class="field-label">Downloads</label>
+          <input type="text" class="field" id="f-downloads" placeholder="e.g. 10M+">
+        </div>
       </div>
       <div class="field-group">
         <label class="field-label">Screenshot URLs (comma-separated)</label>
