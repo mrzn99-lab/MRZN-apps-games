@@ -83,6 +83,8 @@ function editApp(app) {
   document.getElementById("f-category").value = app.category;
   document.getElementById("f-description").value = app.description;
   document.getElementById("f-icon").value = app.icon_url || "";
+  document.getElementById("f-size").value = app.app_size || "";
+  document.getElementById("f-downloads").value = app.downloads || "";
   document.getElementById("f-screenshots").value = (app.screenshots || []).join(", ");
   document.getElementById("f-download").value = app.download_url || "";
   document.getElementById("f-note").value = app.developer_note || "";
@@ -103,6 +105,8 @@ async function saveApp(e) {
     category: document.getElementById("f-category").value.trim(),
     description: document.getElementById("f-description").value.trim(),
     icon_url: document.getElementById("f-icon").value.trim() || null,
+    app_size: document.getElementById("f-size").value.trim() || null,
+    downloads: document.getElementById("f-downloads").value.trim() || null,
     screenshots: document.getElementById("f-screenshots").value
       .split(",").map(s => s.trim()).filter(Boolean),
     download_url: document.getElementById("f-download").value.trim() || null,
