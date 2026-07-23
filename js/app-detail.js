@@ -78,6 +78,10 @@ function renderDetail(app, ratingRow, reviews) {
           ${starsHTML(avg, 18)}
           <span class="rating-count">(${count} reviews)</span>
         </div>
+        <div style="display:flex;gap:16px;margin-top:10px;font-family:var(--f-mono);font-size:12px;color:var(--text-faint)">
+          ${app.app_size ? `<span>📦 ${escapeHTML(app.app_size)}</span>` : ""}
+          ${app.downloads ? `<span>⬇ ${escapeHTML(app.downloads)} downloads</span>` : ""}
+        </div>
       </div>
       ${app.download_url ? `<a href="${escapeHTML(app.download_url)}" target="_blank" rel="noopener" class="btn btn-primary">Download</a>` : ""}
     </div>
